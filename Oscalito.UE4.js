@@ -54,8 +54,8 @@ const serveCompressedAssets = false;
 // If true, serve out 'UE4Game.data.gz', if false, serve out 'UE4Game.data'.
 //const dataFileIsGzipCompressed = false;
 
-console.log("Emscripten version: C:/Program Files/Epic Games/UE_4.23/Engine/Extras/ThirdPartyNotUE/emsdk/emscripten/1.38.31");
-console.log("Emscripten configuration: C:/Program Files/Epic Games/UE_4.23/Engine/Intermediate/Build/HTML5/.emscripten");
+console.log("Emscripten version: C:/Program Files/Epic Games/UE_4.22/Engine/Extras/ThirdPartyNotUE/emsdk/emscripten/1.38.20");
+console.log("Emscripten configuration: C:/Program Files/Epic Games/UE_4.22/Engine/Intermediate/Build/HTML5/.emscripten");
 
 
 
@@ -73,7 +73,7 @@ var Module = {
 	assetDownloadProgress: {}, // Track how many bytes of each needed asset has been downloaded so far.
 
 	UE4_indexedDBName: 'UE4_assetDatabase_Oscalito', // this should be an ascii ID string without special characters that is unique to the project that is being packaged
-	UE4_indexedDBVersion: 202103211923, // Bump this number to invalidate existing IDB storages in browsers.
+	UE4_indexedDBVersion: 202103191143, // Bump this number to invalidate existing IDB storages in browsers.
 };
 
 
@@ -154,41 +154,41 @@ function heuristicIs64Bit(type) {
 	if (contains(ua, ['intel mac os'])) return true;
 	return false;
 }
-var heuristic64BitBrowser = heuristicIs64Bit('browser');
 
-// // For best stability on 32-bit browsers, allocate asm.js/WebAssembly heap up front before proceeding
-// // to load any other page content. This mitigates the chances that loading up page assets first would
-// // fragment the memory area of the browser process.
-// var pageSize = 64 * 1024;
-// function alignPageUp(size) { return pageSize * Math.ceil(size / pageSize); }
-// 
-// // The absolute maximum that is possible is one memory page short of 2GB.
-// var MAX_MEMORY = Module['UE4_MultiThreaded']
-// 					? 512 * 1024 * 1024					// multi  threaded - non-growable
-// 					: 2048 * 1024 * 1024 - pageSize;	// single threaded - growable
-// 
-// // note: 32-bit browsers (single threaded) needs to start at 32MB
-// var MIN_MEMORY = Module['UE4_MultiThreaded']
-// 					? 512 * 1024 * 1024		// multi  threaded - non-growable
-// 					:  32 * 1024 * 1024;	// single threaded - growable
-// 
-// function allocateHeap() {
-// 	Module['wasmMemory'] = new WebAssembly.Memory({ initial: MIN_MEMORY / pageSize, maximum: MAX_MEMORY / pageSize });
-// 	if (!Module['wasmMemory']||!Module['wasmMemory'].buffer) {
-// 		throw 'Out of memory';
-// 	}
-// 	Module['buffer'] = Module['wasmMemory'].buffer;
-// 	if (Module['buffer'].byteLength < MIN_MEMORY) {
-// 		delete Module['buffer'];
-// 		throw 'Out of memory';
-// 	}
-// 	Module['TOTAL_MEMORY'] = Module['buffer'].byteLength;
-// }
-// allocateHeap();
-// Module['MAX_MEMORY'] = MAX_MEMORY;
-// 
-// function MB(x) { return (x/1024/1024) + 'MB'; }
-// console.log('Initial memory size: ' + MB(Module['TOTAL_MEMORY']) + ' (MIN_MEMORY: ' + MB(MIN_MEMORY) + ', MAX_MEMORY: ' + MB(MAX_MEMORY) + ', heuristic64BitBrowser: ' + heuristic64BitBrowser + ', heuristic64BitOS: ' + heuristicIs64Bit('os') + ')');
+// For best stability on 32-bit browsers, allocate asm.js/WebAssembly heap up front before proceeding
+// to load any other page content. This mitigates the chances that loading up page assets first would
+// fragment the memory area of the browser process.
+var pageSize = 64 * 1024;
+var heuristic64BitBrowser = heuristicIs64Bit('browser');
+function alignPageUp(size) { return pageSize * Math.ceil(size / pageSize); }
+
+// The absolute maximum that is possible is one memory page short of 2GB.
+var MAX_MEMORY = Module['UE4_MultiThreaded']
+					? 512 * 1024 * 1024					// multi  threaded - non-growable
+					: 2048 * 1024 * 1024 - pageSize;	// single threaded - growable
+
+// note: 32-bit browsers (single threaded) needs to start at 32MB
+var MIN_MEMORY = Module['UE4_MultiThreaded']
+					? 512 * 1024 * 1024		// multi  threaded - non-growable
+					:  32 * 1024 * 1024;	// single threaded - growable
+
+function allocateHeap() {
+	Module['wasmMemory'] = new WebAssembly.Memory({ initial: MIN_MEMORY / pageSize, maximum: MAX_MEMORY / pageSize });
+	if (!Module['wasmMemory']||!Module['wasmMemory'].buffer) {
+		throw 'Out of memory';
+	}
+	Module['buffer'] = Module['wasmMemory'].buffer;
+	if (Module['buffer'].byteLength < MIN_MEMORY) {
+		delete Module['buffer'];
+		throw 'Out of memory';
+	}
+	Module['TOTAL_MEMORY'] = Module['buffer'].byteLength;
+}
+allocateHeap();
+Module['MAX_MEMORY'] = MAX_MEMORY;
+
+function MB(x) { return (x/1024/1024) + 'MB'; }
+console.log('Initial memory size: ' + MB(Module['TOTAL_MEMORY']) + ' (MIN_MEMORY: ' + MB(MIN_MEMORY) + ', MAX_MEMORY: ' + MB(MAX_MEMORY) + ', heuristic64BitBrowser: ' + heuristic64BitBrowser + ', heuristic64BitOS: ' + heuristicIs64Bit('os') + ')');
 
 
 
@@ -1029,10 +1029,10 @@ $(document).ready(function() {
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// memory heap
-//	if (!Module['buffer']) {
-//		showErrorDialog('Failed to allocate ' + MB(MIN_MEMORY) + ' of linear memory for the WebAssembly heap!');
-//		return;
-//	}
+	if (!Module['buffer']) {
+		showErrorDialog('Failed to allocate ' + MB(MIN_MEMORY) + ' of linear memory for the WebAssembly heap!');
+		return;
+	}
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	// check for webgl and cache it for later (UE_BrowserWebGLVersion() reads this)
@@ -1133,7 +1133,7 @@ $(document).ready(function() {
 				return { db: db, wasmBytes: wasmBytes, fromIndexedDB: true };
 			});
 		}).catch(function() {
-			return download(Module.locateFile('Oscalito.wasm'), 'arraybuffer').then(function(wasmBytes) {
+			return download(Module.locateFile('UE4Game.wasm'), 'arraybuffer').then(function(wasmBytes) {
 				return { db: db, wasmBytes: wasmBytes, fromIndexedDB: false };
 			});
 		});
@@ -1145,7 +1145,7 @@ $(document).ready(function() {
 
 		// ----------------------------------------
 		// MAIN JS
-		var mainJsDownload = fetchOrDownloadAndStore(db, Module.locateFile('Oscalito.js'), 'blob').then(function(data) {
+		var mainJsDownload = fetchOrDownloadAndStore(db, Module.locateFile('UE4Game.js'), 'blob').then(function(data) {
 				Module['mainScriptUrlOrBlob'] = data;
 				return addScriptToDom(data).then(function() {
 					addRunDependency('wait-for-compiled-code');
