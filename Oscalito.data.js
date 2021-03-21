@@ -18,7 +18,7 @@ Module.expectedDataFileDownloads++;
     } else {
       throw 'using preloaded data can only be done on a web page or in a web worker';
     }
-    var PACKAGE_NAME = 'D:/UnrealEngine_progetti/Oscalito/Binaries/HTML5/Oscalito.data';
+    var PACKAGE_NAME = 'D:/UnrealEngine_progetti/Oscalito 4.23/Binaries/HTML5/Oscalito.data';
     var REMOTE_PACKAGE_BASE = 'Oscalito.data';
     if (typeof Module['locateFilePackage'] === 'function' && !Module['locateFile']) {
       Module['locateFile'] = Module['locateFilePackage'];
@@ -149,10 +149,10 @@ Module['FS_createPath']('/Oscalito/Content', 'Paks', true, true);
           for (var i = 0; i < files.length; ++i) {
             DataRequest.prototype.requests[files[i].filename].onload();
           }
-              Module['removeRunDependency']('datafile_D:/UnrealEngine_progetti/Oscalito/Binaries/HTML5/Oscalito.data');
+              Module['removeRunDependency']('datafile_D:/UnrealEngine_progetti/Oscalito 4.23/Binaries/HTML5/Oscalito.data');
 
     };
-    Module['addRunDependency']('datafile_D:/UnrealEngine_progetti/Oscalito/Binaries/HTML5/Oscalito.data');
+    Module['addRunDependency']('datafile_D:/UnrealEngine_progetti/Oscalito 4.23/Binaries/HTML5/Oscalito.data');
   
     if (!Module.preloadResults) Module.preloadResults = {};
   
@@ -173,6 +173,6 @@ Module['FS_createPath']('/Oscalito/Content', 'Paks', true, true);
   }
 
  }
- loadPackage({"files": [{"start": 0, "audio": 0, "end": 53, "filename": "/Manifest_NonUFSFiles_HTML5.txt"}, {"start": 53, "audio": 0, "end": 89, "filename": "/UE4CommandLine.txt"}, {"start": 89, "audio": 0, "end": 59166950, "filename": "/Oscalito/Content/Paks/Oscalito-HTML5.pak"}], "remote_package_size": 59166950, "package_uuid": "01e82721-e011-4a42-8c70-0a9c723a7aa8"});
+ loadPackage({"files": [{"start": 0, "audio": 0, "end": 53, "filename": "/Manifest_NonUFSFiles_HTML5.txt"}, {"start": 53, "audio": 0, "end": 89, "filename": "/UE4CommandLine.txt"}, {"start": 89, "audio": 0, "end": 54456716, "filename": "/Oscalito/Content/Paks/Oscalito-HTML5.pak"}], "remote_package_size": 54456716, "package_uuid": "ede2ecd0-c723-4765-8d91-78e685daa3e6"});
 
 })();
