@@ -1,0 +1,4 @@
+
+- non incollare HTML5LaunchHelper.exe
+
+- lascia readme.md
